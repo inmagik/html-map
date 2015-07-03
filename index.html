@@ -3,16 +3,38 @@
   <head>
     <meta charset="utf-8">
     <title>{{config.title}}</title>
+    <link rel="stylesheet" href="css/style.css" media="screen">
+    <link rel="stylesheet" href="lib/ol3/ol.css" media="screen">
   </head>
   <body>
 
-    <div class="">
+
+    <div class="map" the-map map-handle="main-map">
+
 
     </div>
+
+    <script src="lib/ol3/ol-debug.js" charset="utf-8"></script>
+    <script src="lib/underscore/underscore-min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="lib/css.js/css.min.js"></script>
+
+    <!--
+    <script type="text/javascript">
+        var cssString = ' .someSelector { margin:40px 10px; padding:5px}';
+        //initialize parser object
+        var parser = new cssjs();
+        //parse css string
+        var parsed = parser.parseCSS(cssString);
+
+        console.error(parsed);
+    </script>
+    -->
+
     <script src="lib/angular/angular.min.js"></script>
     <script src="js/app.js" charset="utf-8"></script>
     <script src="js/services.js" charset="utf-8"></script>
     <script src="js/controllers.js" charset="utf-8"></script>
+    <script src="js/directives.js" charset="utf-8"></script>
 
 
   </body>

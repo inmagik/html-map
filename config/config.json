@@ -1,4 +1,23 @@
 {
-  "title" : "My map"
+  "title" : "My map",
+  "map" : {
+    "center" : [9.2, 45.483333],
+    "centerProjection" : "EPSG:4326",
+    "zoom" : 11
+  },
+
+  "layers" : [
+    {
+      "name" : "stamen",
+      "layerType" : "stamen",
+      "layerOptions" : { "layer" : "toner"}
+    },
+    {
+      "name" : "fermate-metro",
+      "layerType" : "geojson",
+      "layerOptions" : { "url" : "data/fermate-metro.geojson" }
+    }
+
+  ]
 
 }
