@@ -22,7 +22,6 @@
 
     //#TODO: move to service
     var getLayer = function(obj){
-      console.log(obj)
       if(obj.layerType == 'stamen'){
         return new ol.layer.Tile({
           source: new ol.source.Stamen(obj.layerOptions)
@@ -60,7 +59,6 @@
         angular.forEach($scope.config.layers, function(l){
           var layer = getLayer(l);
           if(layer){
-            console.log(1, layer)
             that.map.addLayer(layer);
           }
         });

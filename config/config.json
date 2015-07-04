@@ -13,7 +13,7 @@
       "layerOptions" : { "layer" : "toner"}
     },
     {
-      "name" : "fermate-metro",
+      "name" : "fermate_metro",
       "layerType" : "geojson",
       "layerOptions" : { "url" : "data/fermate-metro.geojson" }
     }

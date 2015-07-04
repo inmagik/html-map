@@ -4,7 +4,7 @@
   angular.module("HtmlMap")
   .factory('ConfigService', function($http, $q){
 
-    var svc = { config : null, cssConfig : null};
+    var svc = { config : null, cssConfig : null, shader:null};
     var parsedRules = [];
 
     var loadConfig = function(){
@@ -26,10 +26,7 @@
       $http.get('config/config.css')
       .then(function (resp) {
         svc.cssConfig = resp.data;
-        var parser = new cssjs();
-        //parse css string
-        parsedRules = parser.parseCSS(resp.data);
-        console.log(2100, parsedRules);
+        svc.shader = new carto.RendererJS().render(svc.cssConfig);
 
         deferred.resolve(resp.data);
       }).catch(function(err){
@@ -39,22 +36,42 @@
       return deferred.promise;
 
     };
+    
+    var createOlStyle = function(opts){
+      var fill = new ol.style.Fill({
+        color: opts['marker-fill'] || 'rgba(255,255,255,0.4)'
+      });
+      var stroke = new ol.style.Stroke({
+        color: '#3399CC',
+        width: opts['stroke-width'] || 1.25
+      });
+      var styles = [
+        new ol.style.Style({
+          image: new ol.style.Circle({
+            fill: fill,
+            stroke: stroke,
+            radius: opts['marker-width'] || 5
+          }),
+          fill: fill,
+          stroke: stroke
+        })
+      ];
+
+     return styles;
+
+    };
 
     svc.getStyleFor = function(name){
-      var selectorName = "."+name;
-      var rule = _.findWhere(parsedRules, {selector:selectorName});
+      var layer = svc.shader.findLayer({ name: "#"+name });
+      if(!layer){
+        return undefined;
+      }
+      return function(feature, resolution){
+        var props = feature.getProperties();
+        var style = layer.getStyle(props, { resolution: resolution});
+        return createOlStyle(style);
+      }
 
-      var x = _.groupBy(rule.rules, "directive");
-
-      return new ol.style.Style({
-        image: new ol.style.Circle({
-          radius: 5,
-          fill: new ol.style.Fill({color: '#666666'}),
-          stroke: new ol.style.Stroke({color: '#bada55', width: 1})
-        })
-      })
-
-      console.log("rule", rule, x);
 
     }
 
@@ -76,7 +93,6 @@
 
     svc.applyMethod = function(func){
       angular.forEach(svc.maps, function(ctrl, name){
-        console.log("ey", ctrl.map);
         func.apply(ctrl);
       });
     };
