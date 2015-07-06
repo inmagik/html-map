@@ -28,6 +28,33 @@
         })
       }
 
+      if(obj.layerType == 'mapquest'){
+        return new ol.layer.Tile({
+          source: new ol.source.MapQuest(obj.layerOptions)
+        })
+      }
+
+      if(obj.layerType == 'opencyclemap'){
+        return new ol.layer.Tile({
+          source: new ol.source.OSM({
+            attributions: [
+              new ol.Attribution({
+                html: 'All maps &copy; ' +
+                    '<a href="http://www.opencyclemap.org/">OpenCycleMap</a>'
+              }),
+              ol.source.OSM.ATTRIBUTION
+            ],
+            url: 'http://{a-c}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png'
+          })
+        });
+      }
+
+      if(obj.layerType == 'osm'){
+        return new ol.layer.Tile({
+          source: new ol.source.OSM(obj.layerOptions)
+        })
+      }
+
       if(obj.layerType == 'geojson'){
         return new ol.layer.Vector({
           source: new ol.source.Vector({

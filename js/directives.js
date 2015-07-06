@@ -47,10 +47,8 @@
               if (featureAndLayer) {
                   var feature = featureAndLayer[0];
                   var layer = featureAndLayer[1];
-                  console.log("f", feature)
-                  var coord = feature.getGeometry().getCoordinates();
+                  var coord= evt.coordinate;
                   var props = feature.getProperties();
-
 
                   $http.get(layer.get('templatePopup'))
                   .then(function(resp){

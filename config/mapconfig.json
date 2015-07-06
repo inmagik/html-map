@@ -3,22 +3,29 @@
   "map" : {
     "center" : [9.2, 45.483333],
     "centerProjection" : "EPSG:4326",
-    "zoom" : 14,
+    "zoom" : 11,
     "extent" : [9.0, 45.2, 9.4, 45.6 ]
   },
 
   "layers" : [
     {
-      "name" : "stamen",
-      "layerType" : "stamen",
-      "layerOptions" : { "layer" : "toner"}
+      "name" : "mapquest",
+      "layerType" : "mapquest",
+      "layerOptions" : { "layer" : "osm"}
     },
     {
       "name" : "fermate_metro",
       "layerType" : "geojson",
       "layerOptions" : { "url" : "data/fermate-metro.geojson" },
       "templatePopup" : "templates/example.html"
+    },
+    {
+      "name" : "ztlbg",
+      "layerType" : "geojson",
+      "layerOptions" : { "url" : "data/ztlbg.geojson" },
+      "templatePopup" : "templates/table.html"
     }
+
 
   ]
 
