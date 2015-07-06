@@ -183,7 +183,7 @@
             url: obj.layerOptions.url,
             format: new ol.format.GeoJSON()
           }),
-          style : svc.getStyleFor(obj.name, map)
+            style : svc.getStyleFor(obj.name, map)
         });
 
       }
