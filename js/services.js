@@ -118,19 +118,21 @@
 
     };
 
-    svc.getStyleFor = function(name){
+    svc.getStyleFor = function(name, map){
       var layer = ConfigService.shader.findLayer({ name: "#"+name });
       if(!layer){
         return undefined;
       }
       return function(feature, resolution){
+        console.log(1, feature)
         var props = feature.getProperties();
-        var style = layer.getStyle(props, { resolution: resolution});
+        var zoom = map.getView().getZoom();
+        var style = layer.getStyle(props, { resolution: resolution, zoom:zoom});
         return createOlStyle(style);
       }
     }
 
-    svc.createLayer= function(obj){
+    svc.createLayer= function(obj, map){
 
       if(obj.layerType == 'stamen'){
         return new ol.layer.Tile({
@@ -181,7 +183,7 @@
             url: obj.layerOptions.url,
             format: new ol.format.GeoJSON()
           }),
-          style : svc.getStyleFor(obj.name)
+          style : svc.getStyleFor(obj.name, map)
         });
 
       }

@@ -43,7 +43,7 @@
         }
 
         angular.forEach($scope.config.layers, function(l){
-          var layer = OLFactory.createLayer(l);
+          var layer = OLFactory.createLayer(l, that.map);
           if(l.templatePopup){
             console.error(l.templatePopup);
             layer.set('templatePopup', l.templatePopup)
