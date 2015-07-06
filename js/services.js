@@ -9,7 +9,7 @@
 
     var loadConfig = function(){
       var deferred = $q.defer();
-      $http.get('config/config.json')
+      $http.get('config/mapconfig.json')
       .then(function (resp) {
         svc.config = resp.data;
         deferred.resolve(resp.data);
@@ -23,7 +23,7 @@
 
     var loadCssConfig = function(){
       var deferred = $q.defer();
-      $http.get('config/config.css')
+      $http.get('config/geostyle.css')
       .then(function (resp) {
         svc.cssConfig = resp.data;
         svc.shader = new carto.RendererJS().render(svc.cssConfig);
@@ -36,7 +36,7 @@
       return deferred.promise;
 
     };
-    
+
     var createOlStyle = function(opts){
       var fill = new ol.style.Fill({
         color: opts['marker-fill'] || 'rgba(255,255,255,0.4)'
