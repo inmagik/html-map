@@ -53,6 +53,7 @@
 
 
     var createOlStyle = function(opts){
+      console.log(1, opts)
       var fill = new ol.style.Fill({
         color: opts['marker-fill'] || 'rgba(255,255,255,0.4)'
       });
@@ -60,17 +61,58 @@
         color: '#3399CC',
         width: opts['stroke-width'] || 1.25
       });
-      var styles = [
-        new ol.style.Style({
-          image: new ol.style.Circle({
-            fill: fill,
-            stroke: stroke,
-            radius: opts['marker-width'] || 5
-          }),
+
+      var pfill;
+      if(opts['polygon-fill']){
+        pfill = new ol.style.Fill({
+          color: opts['polygon-fill']
+        });
+      }
+
+      var lstroke;
+      if(opts['line-width'] || opts['line-color']){
+        lstroke = new ol.style.Stroke({
+          color: opts['line-color'] || '#222',
+          width: opts['line-width'] || 1
+        });
+      }
+
+      var options = {
+        image: new ol.style.Circle({
           fill: fill,
-          stroke: stroke
+          stroke: stroke,
+          radius: opts['marker-width'] || 5
+        }),
+        fill: pfill || fill,
+        stroke: lstroke || stroke
+      };
+
+      if(opts['text-name']){
+
+        var textStroke = new ol.style.Stroke({
+          color: opts['text-stroke']|| 'black',
+          width: opts['text-stroke-width'] || 1
+        });
+
+        var textFill = new ol.style.Fill({
+          color: opts['text-fill'] || '#000'
+        });
+
+        options.text = new ol.style.Text({
+          font: opts['text-font'] || '12px Calibri,sans-serif',
+          text: opts['text-name'],
+          fill: textFill,
+          stroke: textStroke
         })
+      };
+
+      var style  = new ol.style.Style(options);
+
+      var styles = [
+        style
       ];
+
+
 
      return styles;
 

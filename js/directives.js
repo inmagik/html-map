@@ -39,7 +39,6 @@
 
           // Add an event handler for the map "singleclick" event
           this.map.on('click', function(evt) {
-            console.log(evt)
               // Hide existing popup and reset it's offset
               that.popup.hide();
               that.popup.setOffset([0, 0]);
@@ -87,8 +86,7 @@
           this.setCenter = function(center){ return this.map.getView().setCenter(center)};
           this.setZoom = function(zoom){ return this.map.getView().setZoom(zoom)};
 
-          console.log(this)
-
+        
 
           $scope.$emit('map-ready-'+handle);
 

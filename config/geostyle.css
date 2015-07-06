@@ -1,6 +1,8 @@
 #fermate_metro {
   marker-width: 5;
   marker-fill: hotpink;
+  text-name: [FERMATA];
+  text-face-name: 'Arial';
 
   [FERMATA="CORDUSIO"]{
     marker-width: 12;
@@ -14,3 +16,10 @@
   };
 
 };
+
+#ztlbg{
+  text-name : [NOME_ZTL];
+  text-fill: crimson;
+  polygon-fill: lightblue;
+  line-color: crimson;
+}
