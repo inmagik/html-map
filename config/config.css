@@ -1,13 +1,16 @@
 #fermate_metro {
   marker-width: 10;
   marker-fill: rgb(200, 200, 0);
+
   [FERMATA="CORDUSIO"]{
     marker-width: 20;
     marker-fill: red;
-  }
+    stroke-width: 4;
+  };
+
   [FERMATA="LORETO"]{
     marker-width: 20;
     marker-fill: blue;
-  }
+  };
 
 };

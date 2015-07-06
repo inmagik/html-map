@@ -56,6 +56,11 @@
         z = $scope.config.map.zoom;
         this.setZoom(z);
 
+        if($scope.config.map.extent){
+          //this.map.getView().setProperties({"extent":$scope.config.map.extent});
+          //this.map.getView().getProjection().setWorldExtent($scope.config.map.extent);
+        }
+
         angular.forEach($scope.config.layers, function(l){
           var layer = getLayer(l);
           if(layer){

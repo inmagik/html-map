@@ -3,14 +3,15 @@
   "map" : {
     "center" : [9.2, 45.483333],
     "centerProjection" : "EPSG:4326",
-    "zoom" : 11
+    "zoom" : 11,
+    "extent" : [9.0, 45.2, 9.4, 45.6 ]
   },
 
   "layers" : [
     {
       "name" : "stamen",
       "layerType" : "stamen",
-      "layerOptions" : { "layer" : "toner"}
+      "layerOptions" : { "layer" : "watercolor"}
     },
     {
       "name" : "fermate_metro",
