@@ -24,6 +24,8 @@
             })
           });
 
+          this.map.addInteraction(new ol.interaction.Select());
+
           // Create a popup overlay which will be used to display feature info
           this.popup = new ol.Overlay.Popup();
           this.map.addOverlay(this.popup);
