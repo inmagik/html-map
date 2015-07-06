@@ -37,6 +37,21 @@
 
     };
 
+
+
+    svc.configPromise = $q.all([loadConfig(), loadCssConfig()]);
+
+    return svc
+
+
+  })
+
+
+  .factory('OLFactory', function(ConfigService, $http, $q){
+
+    var svc = { };
+
+
     var createOlStyle = function(opts){
       var fill = new ol.style.Fill({
         color: opts['marker-fill'] || 'rgba(255,255,255,0.4)'
@@ -62,7 +77,7 @@
     };
 
     svc.getStyleFor = function(name){
-      var layer = svc.shader.findLayer({ name: "#"+name });
+      var layer = ConfigService.shader.findLayer({ name: "#"+name });
       if(!layer){
         return undefined;
       }
@@ -71,18 +86,75 @@
         var style = layer.getStyle(props, { resolution: resolution});
         return createOlStyle(style);
       }
-
-
     }
 
-    svc.configPromise = $q.all([loadConfig(), loadCssConfig()]);
+    svc.createLayer= function(obj){
 
+      if(obj.layerType == 'stamen'){
+        return new ol.layer.Tile({
+          title : obj.title || 'Stamen '+obj.layerOptions.layer,
+          type : "base",
+          source: new ol.source.Stamen(obj.layerOptions)
+        })
+      }
 
-    return svc
+      if(obj.layerType == 'mapquest'){
 
+        return new ol.layer.Tile({
+          title : obj.title || 'MapQuest '+obj.layerOptions.layer,
+          type : "base",
+          source: new ol.source.MapQuest(obj.layerOptions)
+        })
+      }
+
+      if(obj.layerType == 'opencyclemap'){
+        return new ol.layer.Tile({
+          title : obj.title || 'OSM opencyclemap',
+          type : "base",
+          source: new ol.source.OSM({
+            attributions: [
+              new ol.Attribution({
+                html: 'All maps &copy; ' +
+                    '<a href="http://www.opencyclemap.org/">OpenCycleMap</a>'
+              }),
+              ol.source.OSM.ATTRIBUTION
+            ],
+            url: 'http://{a-c}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png'
+          })
+        });
+      }
+
+      if(obj.layerType == 'osm'){
+        return new ol.layer.Tile({
+          title : obj.title || 'OpenStreetMap',
+          type : "base",
+          source: new ol.source.OSM(obj.layerOptions)
+        })
+      }
+
+      if(obj.layerType == 'geojson'){
+        return new ol.layer.Vector({
+          title : obj.title || obj.name,
+          source: new ol.source.Vector({
+            url: obj.layerOptions.url,
+            format: new ol.format.GeoJSON()
+          }),
+          style : svc.getStyleFor(obj.name)
+        });
+
+      }
+      return null;
+    }
+
+    return svc;
 
 
   })
+
+
+
+
+
 
 
   .factory('MapsControllerDelegate', function($http, $q){

@@ -26,6 +26,13 @@
 
           this.map.addInteraction(new ol.interaction.Select());
 
+          this.createLayerSwitcher = function(){
+            this.layerSwitcher = new ol.control.LayerSwitcher({
+              //tipLabel: 'Légende' // Optional label for button
+            });
+            this.map.addControl(this.layerSwitcher);
+          }
+
           // Create a popup overlay which will be used to display feature info
           this.popup = new ol.Overlay.Popup();
           this.map.addOverlay(this.popup);

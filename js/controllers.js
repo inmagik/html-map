@@ -2,7 +2,7 @@
   "use strict";
 
   angular.module("HtmlMap")
-  .controller('BodyCtrl', function($scope, $timeout, ConfigService, MapsControllerDelegate){
+  .controller('BodyCtrl', function($scope, $timeout, ConfigService, MapsControllerDelegate, OLFactory){
     ConfigService.configPromise.then(function(data){
         $scope.config = validateConfig(ConfigService.config);
         MapsControllerDelegate.waitForMap('main-map')
@@ -14,59 +14,9 @@
       return cfg;
     };
 
-    var getStyleFor = function(name){
-      return ConfigService.getStyleFor(name) || undefined;
-      //return undefined;
-    }
 
 
     //#TODO: move to service
-    var getLayer = function(obj){
-      if(obj.layerType == 'stamen'){
-        return new ol.layer.Tile({
-          source: new ol.source.Stamen(obj.layerOptions)
-        })
-      }
-
-      if(obj.layerType == 'mapquest'){
-        return new ol.layer.Tile({
-          source: new ol.source.MapQuest(obj.layerOptions)
-        })
-      }
-
-      if(obj.layerType == 'opencyclemap'){
-        return new ol.layer.Tile({
-          source: new ol.source.OSM({
-            attributions: [
-              new ol.Attribution({
-                html: 'All maps &copy; ' +
-                    '<a href="http://www.opencyclemap.org/">OpenCycleMap</a>'
-              }),
-              ol.source.OSM.ATTRIBUTION
-            ],
-            url: 'http://{a-c}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png'
-          })
-        });
-      }
-
-      if(obj.layerType == 'osm'){
-        return new ol.layer.Tile({
-          source: new ol.source.OSM(obj.layerOptions)
-        })
-      }
-
-      if(obj.layerType == 'geojson'){
-        return new ol.layer.Vector({
-          source: new ol.source.Vector({
-            url: obj.layerOptions.url,
-            format: new ol.format.GeoJSON()
-          }),
-          style : getStyleFor(obj.name)
-        });
-
-      }
-      return null;
-    }
 
     $scope.startMap = function(){
 
@@ -88,8 +38,12 @@
           //this.map.getView().getProjection().setWorldExtent($scope.config.map.extent);
         }
 
+        if($scope.config.map.layerSwitcher !== false){
+          this.createLayerSwitcher(c);
+        }
+
         angular.forEach($scope.config.layers, function(l){
-          var layer = getLayer(l);
+          var layer = OLFactory.createLayer(l);
           if(l.templatePopup){
             console.error(l.templatePopup);
             layer.set('templatePopup', l.templatePopup)

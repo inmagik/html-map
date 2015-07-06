@@ -10,8 +10,12 @@
   "layers" : [
     {
       "name" : "mapquest",
-      "layerType" : "mapquest",
-      "layerOptions" : { "layer" : "osm"}
+      "layerType" : "opencyclemap"
+    },
+    {
+      "name" : "toner",
+      "layerType" : "stamen",
+      "layerOptions" : { "layer" : "toner"}
     },
     {
       "name" : "fermate_metro",
