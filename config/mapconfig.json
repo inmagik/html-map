@@ -3,7 +3,7 @@
   "map" : {
     "center" : [9.2, 45.483333],
     "centerProjection" : "EPSG:4326",
-    "zoom" : 11,
+    "zoom" : 14,
     "extent" : [9.0, 45.2, 9.4, 45.6 ]
   },
 
@@ -11,12 +11,13 @@
     {
       "name" : "stamen",
       "layerType" : "stamen",
-      "layerOptions" : { "layer" : "watercolor"}
+      "layerOptions" : { "layer" : "toner"}
     },
     {
       "name" : "fermate_metro",
       "layerType" : "geojson",
-      "layerOptions" : { "url" : "data/fermate-metro.geojson" }
+      "layerOptions" : { "url" : "data/fermate-metro.geojson" },
+      "templatePopup" : "templates/example.html"
     }
 
   ]

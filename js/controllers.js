@@ -63,6 +63,10 @@
 
         angular.forEach($scope.config.layers, function(l){
           var layer = getLayer(l);
+          if(l.templatePopup){
+            console.error(l.templatePopup);
+            layer.set('templatePopup', l.templatePopup)
+          }
           if(layer){
             that.map.addLayer(layer);
           }
