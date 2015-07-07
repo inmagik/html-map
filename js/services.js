@@ -138,14 +138,39 @@
       }
     }
 
+
+    var xyzLayer= function(obj){
+      return new ol.layer.Tile({
+        title : obj.title || 'XYZ Layer',
+        type : "base",
+        source: new ol.source.XYZ(obj.layerOptions)
+      })
+    };
+
+    var getBaseTileOptions = function(obj){
+      var out = {};
+      if(!obj.layerOptions){
+        return out;
+      }
+      out = _.pick(obj.layerOptions, ['opacity', 'hue', 'contrast', 'brightness']);
+      return out;
+
+    }
+
     svc.createLayer= function(obj, map){
 
+      var baseTileOptions =getBaseTileOptions(obj);
+
       if(obj.layerType == 'stamen'){
-        return new ol.layer.Tile({
-          title : obj.title || 'Stamen '+obj.layerOptions.layer,
-          type : "base",
-          source: new ol.source.Stamen(obj.layerOptions)
-        })
+        var opts = _.extend(
+            baseTileOptions,
+            {
+              title : obj.title || 'Stamen '+obj.layerOptions.layer,
+              type : "base",
+              source: new ol.source.Stamen(obj.layerOptions)
+            }
+          );
+        return new ol.layer.Tile(opts)
       }
 
       if(obj.layerType == 'mapquest'){
@@ -180,6 +205,35 @@
           type : "base",
           source: new ol.source.OSM(obj.layerOptions)
         })
+      }
+
+
+      var cartoDBNames = {
+        'positron' : 'light_all',
+        'positron-no-labels' : 'light_nolabels',
+        'dark-matter' : 'dark_all',
+        'dark-matter-no-labels' : 'dark_nolabels',
+      }
+      if(obj.layerType == 'cartodb'){
+        var l = cartoDBNames[obj.layerOptions.layer];
+        var opts = _.extend(
+            baseTileOptions,
+            {
+              title : obj.title || 'CartoDB ' + obj.layerOptions.layer,
+              type : "base",
+              source: new ol.source.XYZ({
+                urls : [
+                    'http://a.basemaps.cartocdn.com/'+l+'/{z}/{x}/{y}.png',
+                    'http://a.basemaps.cartocdn.com/'+l+'/{z}/{x}/{y}.png',
+                    'http://a.basemaps.cartocdn.com/'+l+'/{z}/{x}/{y}.png',
+                    'http://a.basemaps.cartocdn.com/'+l+'/{z}/{x}/{y}.png'
+                ],
+                attributions : [new ol.Attribution({html:'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'})]
+              }
+            )
+          });
+          return new ol.layer.Tile(opts)
+
       }
 
       if(obj.layerType == 'geojson'){

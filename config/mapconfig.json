@@ -13,10 +13,12 @@
   "layers" : [
 
     {
-      "name" : "toner",
-      "layerType" : "stamen",
-      "layerOptions" : { "layer" : "toner"}
+      "name" : "darkmatter",
+      "layerType" : "cartodb",
+      "layerOptions" : { "layer" : "dark-matter" },
+      "templatePopup" : "templates/example.html"
     },
+
     {
       "name" : "fermate_metro",
       "layerType" : "geojson",

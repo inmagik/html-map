@@ -7,8 +7,8 @@
     text-dy: 16;
     text-face-name: 'Arial';
     marker-width: 10;
-    text-stroke: skyblue;
-    text-fill:black;
+    text-stroke: black;
+    text-fill:white;
   }
 
   [FERMATA="CORDUSIO"]{
