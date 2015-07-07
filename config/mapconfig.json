@@ -6,7 +6,7 @@
     "zoom" : 11,
     "minZoom" : 10,
     "maxZoom" : 14,
-    "extent" : [9.0, 45.2, 9.4, 45.6 ],
+    "extent" : [9.0, 45.2, 10, 45.6 ],
     "extentProjection" : "EPSG:4326"
   },
 

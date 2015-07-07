@@ -17,12 +17,14 @@
   [FERMATA="LORETO"]{
     marker-width: 15;
     marker-fill: skyblue;
+    z-index:10;
   };
 
 };
 
 #ztlbg{
   polygon-fill: lightblue;
+  polygon-opacity: 0.4,
   line-color: crimson;
 
   [zoom > 12]{

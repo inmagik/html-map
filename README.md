@@ -169,9 +169,23 @@ TBW
 * marker-width
 * marker-fill
 * stroke-width
-* polygon-fill
 * line-color
+* line-width
+* polygon-fill
+
+
 * text-name
+* text-size
+* text-face-name
+* text-fill
+* text-stroke
+* text-stroke-width (does not exist in carto?)
+* text-dx
+* text-dy
+
+* text-rotation (does not exist in carto?)
+
+* z-index (does not exist in carto?)
 
 
 

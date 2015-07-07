@@ -98,19 +98,25 @@
         });
 
         options.text = new ol.style.Text({
-          font: opts['text-font'] || '12px Calibri,sans-serif',
+          font: opts['text-size'] || '12px' + ' '+ opts['text-face-name'] || 'Calibri,sans-serif',
           text: opts['text-name'],
           fill: textFill,
-          stroke: textStroke
+          stroke: textStroke,
+          offsetX : opts['text-dx'],
+          offsetY : opts['text-dy'],
+          rotation : opts['text-rotation']
         })
       };
+
+      if(opts['z-index']){
+        options.zIndex = opts['z-index'];
+      }
 
       var style  = new ol.style.Style(options);
 
       var styles = [
         style
       ];
-
 
 
      return styles;
