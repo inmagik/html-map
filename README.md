@@ -87,9 +87,9 @@ Items in configuration have the following meaning:
 
 #### Style configuration
 
-All the layers styling is done with [CartoCSS](https://github.com/mapbox/carto). The configuration must be written in the file **config/geostyle.css**. 
+All the layers styling is done with [CartoCSS](https://github.com/mapbox/carto). The configuration must be written in the file **config/geostyle.css**.
 
-The syntax currently supports a subset of CartoCSS directives, but 
+The syntax currently supports a subset of CartoCSS directives, but
 
 Here's an example:
 
@@ -133,15 +133,15 @@ These are the rules of styling:
 
 *  you can refer to layers you configured in the mapconfig.json file by referring to their name with the id css selector.
  In the previous example, the style of the `#fermate_metro` selector will be used for that geojson layer.
- 
+
 * you can set a number of properties, pretty much like in css, for specifying the visual appeareance of features. Supported CartoCSS directives are listed [here](#supported_cartocss_directives)
- 
-* styes can be applied conditionally to layers by using special selectors that address map state and/or feature fitering. 
+
+* styes can be applied conditionally to layers by using special selectors that address map state and/or feature fitering.
 
 	For example the selector `#ztlbg[zoom=12]` describes the style of the features of the layer named "ztblg" when viewed on the map at zoom level 12
- 
+
  while the selector `#fermate_metro[zoom > 12][FERMATA="LORETO"]` matches all the features of the layer "fermate_metro" with the property "FERMATA" equals to "LORETO" when viewed at zoom level greater than 12.
- 
+
 * styles can be nested, as it happens in less.css preprocessor
 
 
@@ -162,9 +162,8 @@ TBW
 
 TBW
 
-
-## SUPPORTED CARTOCSS DIRECTIVES
 <a id="supported_cartocss_directives"></a>
+## SUPPORTED CARTOCSS DIRECTIVES
 
 * marker-width
 * marker-fill
@@ -172,8 +171,6 @@ TBW
 * line-color
 * line-width
 * polygon-fill
-
-
 * text-name
 * text-size
 * text-face-name
@@ -182,9 +179,7 @@ TBW
 * text-stroke-width (does not exist in carto?)
 * text-dx
 * text-dy
-
 * text-rotation (does not exist in carto?)
-
 * z-index (does not exist in carto?)
 
 
