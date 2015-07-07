@@ -97,6 +97,8 @@
           color: opts['text-fill'] || '#000'
         });
 
+        console.log(1, opts)
+
         options.text = new ol.style.Text({
           font: opts['text-size'] || '12px' + ' '+ opts['text-face-name'] || 'Calibri,sans-serif',
           text: opts['text-name'],

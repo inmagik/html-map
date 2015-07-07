@@ -4,8 +4,11 @@
 
   [zoom > 12]{
     text-name: [FERMATA];
+    text-dy: 16;
     text-face-name: 'Arial';
     marker-width: 10;
+    text-stroke: skyblue;
+    text-fill:black;
   }
 
   [FERMATA="CORDUSIO"]{
@@ -30,6 +33,7 @@
   [zoom > 12]{
     text-name : [NOME_ZTL];
     text-fill: crimson;
+    text-face-name: 'Arial';
   }
 
 }
