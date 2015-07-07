@@ -8,10 +8,7 @@
   },
 
   "layers" : [
-    {
-      "name" : "mapquest",
-      "layerType" : "opencyclemap"
-    },
+    
     {
       "name" : "toner",
       "layerType" : "stamen",
