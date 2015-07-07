@@ -17,6 +17,7 @@
 
           this.map = new ol.Map({
             layers: [],
+            projection: 'EPSG:3857',
             //interactions : [new ol.interaction.Select()],
             target: $element[0],
             view: new ol.View({
@@ -80,13 +81,25 @@
           });
 
 
+          //view change. required for setting extent at runtime
 
 
           //shortcut methods
           this.setCenter = function(center){ return this.map.getView().setCenter(center)};
           this.setZoom = function(zoom){ return this.map.getView().setZoom(zoom)};
 
-        
+          this.setViewOptions = function(options){
+            var v = this.map.getView();
+            var viewOpts = {
+              extent : options.extent,
+              minZoom : options.minZoom || v.getZoom(),
+              maxZoom : options.maxZoom || v.getZoom(),
+              center : options.center || v.getCenter(),
+              zoom : options.zoom || v.getZoom(),
+            };
+            var newView = new ol.View(viewOpts);
+            this.map.setView(newView);
+          };
 
           $scope.$emit('map-ready-'+handle);
 

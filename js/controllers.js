@@ -22,17 +22,29 @@
 
       MapsControllerDelegate.applyMethod(function(){
         var that = this;
-        var c, z;
+        var c, z, e;
         if($scope.config.map.centerProjection){
           c = ol.proj.transform($scope.config.map.center, $scope.config.map.centerProjection, 'EPSG:3857');
         } else {
           c = $scope.config.map.center
         }
-        this.setCenter(c);
+        if($scope.config.map.extent && $scope.config.map.extentProjection){
+          var transformer = ol.proj.getTransform($scope.config.map.extentProjection, 'EPSG:3857');
+          e = ol.extent.applyTransform($scope.config.map.extent, transformer);
+        } else if ($scope.config.map.extent) {
+          e = $scope.config.map.extent;
+        }
 
         z = $scope.config.map.zoom;
-        this.setZoom(z);
 
+        this.setViewOptions({
+          center : c,
+          zoom : z,
+          minZoom : $scope.config.map.minZoom,
+          maxZoom : $scope.config.map.maxZoom,
+          extent : e
+        });
+        
 
         $scope.resetMap = function(){
           that.setZoom(z);

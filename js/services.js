@@ -53,7 +53,6 @@
 
 
     var createOlStyle = function(opts){
-      console.log(1, opts)
       var fill = new ol.style.Fill({
         color: opts['marker-fill'] || 'rgba(255,255,255,0.4)'
       });
@@ -124,7 +123,6 @@
         return undefined;
       }
       return function(feature, resolution){
-        console.log(1, feature)
         var props = feature.getProperties();
         var zoom = map.getView().getZoom();
         var style = layer.getStyle(props, { resolution: resolution, zoom:zoom});
