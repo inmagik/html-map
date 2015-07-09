@@ -74,15 +74,9 @@
                       cmpl(s);
                     })
                   });
-
-
               }
 
           });
-
-
-          //view change. required for setting extent at runtime
-
 
           //shortcut methods
           this.setCenter = function(center){ return this.map.getView().setCenter(center)};
@@ -101,12 +95,15 @@
             this.map.setView(newView);
           };
 
+          $scope.startMap = function(config){
+            console.log(1, config)
+          }
           $scope.$emit('map-ready-'+handle);
 
         },
         link: function(scope, element, attrs) {
           scope.$on('$destroy', function() {
-            MapsControllerDelegate.unregisterMap(this, $attrs.mapHandle);
+            MapsControllerDelegate.unregisterMap(this, attrs.mapHandle);
           });
         }
         //controllerAs: 'vm',

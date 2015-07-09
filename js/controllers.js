@@ -44,17 +44,11 @@
           maxZoom : $scope.config.map.maxZoom,
           extent : e
         });
-        
 
         $scope.resetMap = function(){
           that.setZoom(z);
           that.setCenter(c);
         };
-
-        if($scope.config.map.extent){
-          //this.map.getView().setProperties({"extent":$scope.config.map.extent});
-          //this.map.getView().getProjection().setWorldExtent($scope.config.map.extent);
-        }
 
         if($scope.config.map.layerSwitcher !== false){
           this.createLayerSwitcher(c);

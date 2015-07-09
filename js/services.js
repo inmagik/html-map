@@ -237,16 +237,54 @@
       }
 
       if(obj.layerType == 'geojson'){
-        return new ol.layer.Vector({
+
+        var opts = {
           title : obj.title || obj.name,
           source: new ol.source.Vector({
             url: obj.layerOptions.url,
-            format: new ol.format.GeoJSON()
+            format: new ol.format.GeoJSON(),
+
           }),
-            style : svc.getStyleFor(obj.name, map)
+          style : svc.getStyleFor(obj.name, map)
+
+        };
+
+        return new ol.layer.Vector(opts);
+      }
+
+
+      /* todo: experimental bbox : not working */
+      if(obj.layerType == 'bbox-geojson'){
+        var l;
+        var src = new ol.source.Vector({
+          loader: function(extent, resolution, projection) {
+            var t = this;
+            var transformer = ol.proj.getTransform('EPSG:3857', 'EPSG:4326');
+            var e  = ol.extent.applyTransform(extent, transformer);
+            var url = obj.layerOptions.url +'?bbox=' + e.join(',');
+            var parser = new ol.format.GeoJSON();
+            $http.get(url).then(function(data){
+              var features = parser.readFeatures(data.data, { dataProjection:"EPSG:4326", featureProjection:"EPSG:3857"});
+              src.addFeatures(features)
+            })
+          },
+          strategy : ol.loadingstrategy.bbox,
+          format : new ol.format.GeoJSON()
         });
 
+        var opts = {
+          title : obj.title || obj.name,
+          source: src,
+          style : svc.getStyleFor(obj.name, map)
+
+        };
+
+        l = new ol.layer.Vector(opts);
+        return l;
       }
+      /*  end experimental bbox */
+
+
       return null;
     }
 
