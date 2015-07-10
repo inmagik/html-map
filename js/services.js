@@ -147,19 +147,42 @@
       })
     };
 
-    var getBaseTileOptions = function(obj){
+    var getBaseTileOptions = function(obj, map){
       var out = {};
       if(!obj.layerOptions){
         return out;
       }
       out = _.pick(obj.layerOptions, ['opacity', 'hue', 'contrast', 'brightness']);
+      if(obj.minZoom || obj.maxZoom){
+          var v = map.getView();
+          var z = 1;
+          var factor = v.zoomFactor_ || 2.0;
+          var r = v.maxResolution_;
+          var zooms = [r];
+          var maxZoom =28;
+          var minZoom = 0;
+          while(z < maxZoom){
+            r = r / factor;
+            zooms.push(r)
+            z+=1;
+            console.log(r)
+          }
+          var x = v.minZoom_||0;
+          if (obj.minZoom){
+            out.maxResolution = zooms[obj.minZoom-x] + zooms[obj.minZoom-x]/1000.0;
+          }
+          if (obj.maxZoom){
+            out.minResolution = zooms[obj.maxZoom-x] - zooms[obj.maxZoom-x]/1000.0;  
+          }
+          
+        }
       return out;
 
     }
 
     svc.createLayer= function(obj, map){
 
-      var baseTileOptions =getBaseTileOptions(obj);
+      var baseTileOptions =getBaseTileOptions(obj, map);
 
       if(obj.layerType == 'stamen'){
         var opts = _.extend(
@@ -238,7 +261,8 @@
 
       if(obj.layerType == 'geojson'){
 
-        var opts = {
+        var opts = _.extend(
+            baseTileOptions, {
           title : obj.title || obj.name,
           source: new ol.source.Vector({
             url: obj.layerOptions.url,
@@ -247,7 +271,7 @@
           }),
           style : svc.getStyleFor(obj.name, map)
 
-        };
+        });
 
         return new ol.layer.Vector(opts);
       }
@@ -272,12 +296,14 @@
           format : new ol.format.GeoJSON()
         });
 
-        var opts = {
+        var opts = _.extend(
+            baseTileOptions,
+        {
           title : obj.title || obj.name,
           source: src,
           style : svc.getStyleFor(obj.name, map)
 
-        };
+        });
 
         l = new ol.layer.Vector(opts);
         return l;
