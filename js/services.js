@@ -163,6 +163,7 @@
           var minZoom = 0;
           while(z < maxZoom){
             r = r / factor;
+            zooms.push(r)
             z+=1;
           }
           var x = v.minZoom_||0;

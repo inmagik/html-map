@@ -2,7 +2,11 @@
   "use strict";
 
   angular.module("HtmlMap")
-  .controller('BodyCtrl', function($scope, $timeout, ConfigService, MapsControllerDelegate, OLFactory){
+  .controller('BodyCtrl', function($scope, $timeout, ConfigService, MapsControllerDelegate, OLFactory, $location){
+
+    var s = $location.search();
+    console.error(s)
+
     ConfigService.configPromise.then(function(data){
         $scope.config = validateConfig(ConfigService.config);
         MapsControllerDelegate.waitForMap('main-map')
