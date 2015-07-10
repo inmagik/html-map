@@ -2,16 +2,34 @@
   "use strict";
 
   angular.module("HtmlMap")
-  .controller('BodyCtrl', function($scope, $timeout, ConfigService, MapsControllerDelegate, OLFactory, $location){
+  .controller('BodyCtrl', function($scope, $timeout, ConfigService, MapsControllerDelegate, OLFactory, $location, repoConfig){
 
     var s = $location.search();
-    console.error(s)
-
-    ConfigService.configPromise.then(function(data){
+    if (s.repo){
+      var pieces = s.repo.split(":");
+      repoConfig.getConfigs(pieces[0], pieces[1], ["mapconfig.json", "geostyle.css"])
+      .then(function(data){
+        ConfigService.setConfig(JSON.parse(data[0]));
+        ConfigService.setCssConfig(data[1]);
         $scope.config = validateConfig(ConfigService.config);
         MapsControllerDelegate.waitForMap('main-map')
         .then($scope.startMap);
-    });
+
+      })
+
+
+    } else {
+
+      ConfigService.configPromise().then(function(data){
+        $scope.config = validateConfig(ConfigService.config);
+        MapsControllerDelegate.waitForMap('main-map')
+        .then($scope.startMap);
+      });
+
+
+    }
+
+    
 
     //#TODO: validate config
     var validateConfig = function(cfg){

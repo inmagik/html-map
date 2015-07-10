@@ -18,7 +18,11 @@
       });
 
       return deferred.promise;
+    }
 
+    svc.setConfig = function(cfg){
+      console.log(1, cfg)
+      svc.config = cfg;
     }
 
     var loadCssConfig = function(){
@@ -27,7 +31,6 @@
       .then(function (resp) {
         svc.cssConfig = resp.data;
         svc.shader = new carto.RendererJS().render(svc.cssConfig);
-
         deferred.resolve(resp.data);
       }).catch(function(err){
         deferred.reject(err);
@@ -38,8 +41,16 @@
     };
 
 
+    svc.setCssConfig = function(str){
+        svc.cssConfig = str;
+        svc.shader = new carto.RendererJS().render(svc.cssConfig);
+    };
 
-    svc.configPromise = $q.all([loadConfig(), loadCssConfig()]);
+
+
+    svc.configPromise = function(){
+      return $q.all([loadConfig(), loadCssConfig()]);
+    }
 
     return svc
 
