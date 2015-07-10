@@ -18,6 +18,7 @@
       "layerOptions" : { "layer" : "dark-matter" },
       "templatePopup" : "templates/example.html"
     },
+
     {
       "name" : "fermate_metro",
       "layerType" : "geojson",
