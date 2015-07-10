@@ -14,9 +14,7 @@
         $scope.config = validateConfig(ConfigService.config);
         MapsControllerDelegate.waitForMap('main-map')
         .then($scope.startMap);
-
-      })
-
+      });
 
     } else {
 
