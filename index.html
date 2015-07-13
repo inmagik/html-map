@@ -7,6 +7,7 @@
 
     <title>{{data.config.mapConfig.title}}</title>
     <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" href="css/loader.css" media="screen">
     <link rel="stylesheet" href="css/style.css" media="screen">
     <link rel="stylesheet" href="lib/ol3/ol.css" media="screen">
     <link rel="stylesheet" href="lib/ol3-popup/src/ol3-popup.css" media="screen">
@@ -14,7 +15,11 @@
   </head>
   <body class="ng-cloak">
   <div class="loader-wrapper text-center" ng-class="{'hidemap' : data.config.mapConfig }">
-    <h2 style="color:#bbb">Loading map</h2>
+
+    <h4 style="color:#bbb">Loading map</h4>
+    <div class="loader">
+    </div>
+
   </div>
   <div class="viewer-wrapper hidemap" ng-class="{'hidemap' : !data.config.mapConfig }">
 
@@ -61,7 +66,12 @@
     <script src="lib/carto/carto.js" charset="utf-8"></script>
     <script src="lib/github-api/github.js"></script>
 
+    <!--<script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>-->
+
     <script src="lib/angular/angular.min.js"></script>
+    <script type="text/javascript" src="lib/angular-modal-service/dst/angular-modal-service.min.js">
+
+    </script>
     <script src="js/app.js" charset="utf-8"></script>
     <script src="js/services.js" charset="utf-8"></script>
     <script src="js/repoconfig.js" charset="utf-8"></script>

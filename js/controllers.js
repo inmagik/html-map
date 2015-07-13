@@ -2,7 +2,7 @@
   "use strict";
 
   angular.module("HtmlMap")
-  .controller('BodyCtrl', function($scope, $timeout, ConfigService, MapsControllerDelegate, OLFactory, $location, repoConfig){
+  .controller('BodyCtrl', function($scope, $timeout, ConfigService, MapsControllerDelegate, ModalService, $location){
 
     $scope.data = { config : null };
     var s = $location.search();
