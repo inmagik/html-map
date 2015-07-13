@@ -2,16 +2,17 @@
   "use strict";
 
   angular.module("HtmlMap")
-  .directive('theMap', function(MapsControllerDelegate, $http, $compile, $timeout){
+  .directive('theMap', function(MapsControllerDelegate, $http, $compile, $timeout, OLFactory){
     return {
         restrict: 'EA',
-        template: '<div>{{a}}</div>',
+        template: '<div></div>',
         scope: true,
         //link: linkFunc,
         controller: function($scope, $element, $attrs){
 
           var that = this;
           var handle = MapsControllerDelegate.registerMap(this, $attrs.mapHandle);
+          this.handle = handle;
 
           $attrs.$set('mapHandle', handle);
 
@@ -24,6 +25,8 @@
 
             })
           });
+
+          this.map.set('mapHandle', handle);
 
           this.map.addInteraction(new ol.interaction.Select());
 
@@ -95,16 +98,74 @@
             this.map.setView(newView);
           };
 
-          $scope.startMap = function(config){
-            console.log(1, config)
-          }
+          this.startMap = function(config){
+            var that = this;
+            var c, z, e;
+            if(config.map.centerProjection){
+              c = ol.proj.transform(config.map.center, config.map.centerProjection, 'EPSG:3857');
+            } else {
+              c = config.map.center
+            }
+            if(config.map.extent && config.map.extentProjection){
+              var transformer = ol.proj.getTransform(config.map.extentProjection, 'EPSG:3857');
+              e = ol.extent.applyTransform(config.map.extent, transformer);
+            } else if (config.extent) {
+              e = config.map.extent;
+            }
+
+            z = config.map.zoom;
+
+            this.setViewOptions({
+              center : c,
+              zoom : z,
+              minZoom : config.minZoom,
+              maxZoom : config.maxZoom,
+              extent : e
+            });
+
+            this.resetMap = function(){
+              that.setZoom(z);
+              that.setCenter(c);
+            };
+
+            if(config.layerSwitcher !== false){
+              this.createLayerSwitcher(c);
+            }
+
+            angular.forEach(config.layers, function(l){
+              var layer = OLFactory.createLayer(l, that.map);
+              if(l.templatePopup){
+                layer.set('templatePopup', l.templatePopup)
+              }
+              if(layer){
+                that.map.addLayer(layer);
+              }
+            });
+
+
+          };
+
           $scope.$emit('map-ready-'+handle);
 
         },
-        link: function(scope, element, attrs) {
+        link: function(scope, element, attrs, ctrl) {
           scope.$on('$destroy', function() {
             MapsControllerDelegate.unregisterMap(this, attrs.mapHandle);
           });
+
+          scope.$watch(function(){
+              return scope.$eval(attrs.configuration)
+          }, function(nv){
+              if(!nv || !nv.mapConfig){
+                console.error("no map configuration passed.")
+                return;
+              }
+              //register style
+              OLFactory.registerStyle(nv.geoStyle, ctrl.handle);
+              //startup map
+              ctrl.startMap(nv.mapConfig)
+          });
+
         }
         //controllerAs: 'vm',
         //bindToController: true // because the scope is isolated
