@@ -2,9 +2,9 @@
   "use strict";
 
   angular.module("HtmlMap")
-  .factory('ConfigService', function($http, $q){
+  .factory('ConfigService', function($http, $q, repoConfig){
 
-    var svc = { config : null, cssConfig : null, shader:null};
+    var svc = { config : null, cssConfig : null};
     var parsedRules = [];
 
     var loadConfig = function(){
@@ -21,7 +21,6 @@
     }
 
     svc.setConfig = function(cfg){
-      console.log(1, cfg)
       svc.config = cfg;
     }
 
@@ -30,37 +29,39 @@
       $http.get('config/geostyle.css')
       .then(function (resp) {
         svc.cssConfig = resp.data;
-        svc.shader = new carto.RendererJS().render(svc.cssConfig);
         deferred.resolve(resp.data);
       }).catch(function(err){
         deferred.reject(err);
       });
 
       return deferred.promise;
-
     };
 
 
-    svc.setCssConfig = function(str){
-        svc.cssConfig = str;
-        svc.shader = new carto.RendererJS().render(svc.cssConfig);
-    };
-
-
-
-    svc.configPromise = function(){
+    svc.getLocalConfig = function(){
       return $q.all([loadConfig(), loadCssConfig()]);
-    }
+    };
 
-    return svc
+    svc.getGitHubConfig = function(repo){
+      var deferred = $q.defer();
+      var pieces = repo.split(":");
+      repoConfig.getConfigs(pieces[0], pieces[1], ["mapconfig.json", "geostyle.css"])
+      .then(function(data){
+          deferred.resolve([JSON.parse(data[0]), data[1]]);
+      });
+      return deferred.promise;
+    };
+
+    return svc;
 
 
   })
 
 
-  .factory('OLFactory', function(ConfigService, $http, $q){
+  .factory('OLFactory', function($http, $q){
 
     var svc = { };
+    svc.registeredStyles = {};
 
 
     var createOlStyle = function(opts){
@@ -108,7 +109,6 @@
           color: opts['text-fill'] || '#000'
         });
 
-        console.log(1, opts)
 
         options.text = new ol.style.Text({
           font: opts['text-size'] || '12px' + ' '+ opts['text-face-name'] || 'Calibri,sans-serif',
@@ -137,7 +137,9 @@
     };
 
     svc.getStyleFor = function(name, map){
-      var layer = ConfigService.shader.findLayer({ name: "#"+name });
+      var handle = map.get('mapHandle');
+      var shader = svc.registeredStyles[handle];
+      var layer = shader.findLayer({ name: "#"+name });
       if(!layer){
         return undefined;
       }
@@ -182,13 +184,18 @@
             out.maxResolution = zooms[obj.minZoom-x] + zooms[obj.minZoom-x]/1000.0;
           }
           if (obj.maxZoom){
-            out.minResolution = zooms[obj.maxZoom-x] - zooms[obj.maxZoom-x]/1000.0;  
+            out.minResolution = zooms[obj.maxZoom-x] - zooms[obj.maxZoom-x]/1000.0;
           }
-          
+
         }
       return out;
 
     }
+
+    svc.registerStyle = function(styleString, handle){
+      svc.registeredStyles[handle] = new carto.RendererJS().render(styleString);
+
+    };
 
     svc.createLayer= function(obj, map){
 
