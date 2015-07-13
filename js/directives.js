@@ -157,7 +157,6 @@
               return scope.$eval(attrs.configuration)
           }, function(nv){
               if(!nv || !nv.mapConfig){
-                console.error("no map configuration passed.")
                 return;
               }
               //register style

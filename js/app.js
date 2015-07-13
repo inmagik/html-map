@@ -1,7 +1,7 @@
 (function(){
   "use strict";
 
-  angular.module("HtmlMap", [])
+  angular.module("HtmlMap", ['angularModalService'])
   .config(function(){
 
   })

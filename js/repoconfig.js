@@ -1,6 +1,6 @@
 angular.module('HtmlMap')
-.factory('repoConfig', ['$q', function ($q) {
-    
+.factory('repoConfig', ['$q', '$http',function ($q, $http) {
+
     var svc = {};
     svc.getConfigForRepo = function(username, repo){
         var deferred = $q.defer();
@@ -15,7 +15,7 @@ angular.module('HtmlMap')
             repo.fetchBranches(function (err, res) {
                 if(err) { deferred.reject(err); }
 
-                
+
 
                 master.fetchContents(function (err, res) {
                     if(err) { deferred.reject(err); }
@@ -33,11 +33,10 @@ angular.module('HtmlMap')
     }
 
 
-    svc.getConfig = function(u, r, f){
+    svc._getConfig = function(u, r, f){
         var deferred = $q.defer();
         var github = new Github({});
         var repo = github.getRepo(u, r);
-        console.error(1, repo)
         repo.read('master', f, function(err, data) {
             if(err){
                 deferred.reject(err);
@@ -45,13 +44,20 @@ angular.module('HtmlMap')
             try {
                 deferred.resolve(data);
             } catch(err){
-                deferred.reject(err);   
+                deferred.reject(err);
             }
         });
 
         return deferred.promise;
 
     }
+
+    svc.getConfig = function(u, r, f){
+        var url = "https://cdn.rawgit.com/"+u+"/"+r+"/master/"+f;
+        return $http.get(url)
+
+    }
+
 
     svc.getConfigs = function(u,r,fs ){
         var p = [];
@@ -64,5 +70,3 @@ angular.module('HtmlMap')
 
     return svc;
 }])
-
-
