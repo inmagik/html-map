@@ -2,7 +2,7 @@
   "use strict";
 
   angular.module("HtmlMap")
-  .directive('theMap', function(MapsControllerDelegate, $http, $compile, $timeout, OLFactory){
+  .directive('theMap', function(MapsControllerDelegate, $http, $compile, $timeout, OLFactory, $rootScope){
     return {
         restrict: 'EA',
         template: '<div></div>',
@@ -105,11 +105,51 @@
 
           this.rebuildMap = function(){
             if(this.map){
+              console.log("d")
               this.map.setTarget(null);
               this.map = null;
             }
             this.initMap();
           };
+
+
+          var transformExtent = function(extent, fromP, toP){
+            var transformer = ol.proj.getTransform(fromP, toP);
+            var e = ol.extent.applyTransform(extent, transformer);
+            return e;
+          };
+
+          this.toInternalExtent = function(extent, extentProj){
+              var toP = this.map.getView().getProjection();
+              return transformExtent(extent, extentProj, toP);
+          };
+
+          this.fromInternalExtent = function(extent, extentProj){
+              var fromP = this.map.getView().getProjection();
+              return transformExtent(extent, fromP, extentProj);
+          };
+
+
+          var transformPoint = function(coords, fromP, toP){
+            var transformer = ol.proj.getTransform(fromP, toP);
+            var p = new ol.geom.Point(coords);
+            console.log("a", p.getCoordinates)
+            console.log(fromP, toP, p.applyTransform(transformer))
+            p.applyTransform(transformer);
+            return p.getCoordinates()
+          };
+
+          this.toInternalPoint = function(point, extentProj){
+              var toP = this.map.getView().getProjection();
+              return transformPoint(point, extentProj, toP);
+          };
+
+          this.fromInternalPoint = function(point, extentProj){
+              var fromP = this.map.getView().getProjection();
+              return transformPoint(point, fromP, extentProj);
+          };
+
+
 
 
           this.addLayerFromConfig = function(l){
@@ -159,6 +199,8 @@
             angular.forEach(config.layers, function(l){
               that.addLayerFromConfig(l);
             });
+
+            $rootScope.$broadcast('map-config-loaded-'+handle);
           };
 
           $scope.$emit('map-ready-'+handle);
@@ -176,6 +218,7 @@
               if(!nv || !nv.mapConfig){
                 return;
               }
+              console.log("config changed")
               //register style
               OLFactory.registerStyle(nv.geoStyle, ctrl.handle);
               //startup map
