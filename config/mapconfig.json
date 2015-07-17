@@ -2,7 +2,7 @@
   "title" : "My map",
   "meta" : {
     "description" : "This is an example map made with html-map, an open source project by INMAGIK",
-    "openDescription" : true
+    "openDescription" : false
   },
   "map" : {
     "center" : [9.2, 45.483333],
