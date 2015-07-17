@@ -1,5 +1,9 @@
 {
   "title" : "My map",
+  "meta" : {
+    "description" : "This is an example map made with html-map, an open source project by INMAGIK",
+    "openDescription" : true
+  },
   "map" : {
     "center" : [9.2, 45.483333],
     "centerProjection" : "EPSG:4326",
