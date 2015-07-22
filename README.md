@@ -10,6 +10,7 @@ Features:
 * JSON based layers configuration
 * Layers styling with cartocss
 * Customizable HTML popup templates for showing features information
+* Geolocation of device
 
 
 ## GETTING STARTED
